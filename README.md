@@ -1,5 +1,7 @@
 # Recurring tasks
 
+![Build and Test](https://github.com/hockeybuggy/recurring_tasks/workflows/Build%20and%20Test/badge.svg)
+
 This project sends reminders to myself on a schedule.
 
 ## The Plan

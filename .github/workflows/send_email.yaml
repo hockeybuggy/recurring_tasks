@@ -1,0 +1,16 @@
+name: Send Email
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 * * * *'
+
+jobs:
+  send email:
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run the program
+      run: cargo run
+
+# TODO actually send an email
