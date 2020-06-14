@@ -1,6 +1,7 @@
 use std::process;
 
 use chrono::{DateTime, Utc};
+use chrono_tz::Tz;
 use recurring_tasks::{display_upcoming_tasks, get_tasks_occurring_in_the_next_hour, Task};
 
 fn main() {
@@ -48,8 +49,13 @@ fn main() {
         },
     ];
 
+    let local_timezone: Tz = "America/Toronto".parse().unwrap();
     let now: DateTime<Utc> = Utc::now();
-    let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, now);
+    let local_datetime = now.with_timezone(&local_timezone);
+    println!("it is now {:?} in utc", now);
+    println!("it is now {:?} in {:?}", local_datetime, local_timezone);
+
+    let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, local_datetime);
 
     if upcoming.len() == 0 {
         println!("There are no upcoming tasks.");

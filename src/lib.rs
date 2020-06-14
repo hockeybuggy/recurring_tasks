@@ -1,7 +1,7 @@
 extern crate chrono;
 extern crate cron;
 
-use chrono::Utc;
+use chrono_tz::Tz;
 use cron::Schedule;
 use std::str::FromStr;
 
@@ -13,7 +13,7 @@ pub struct Task {
 
 pub fn get_tasks_occurring_in_the_next_hour(
     tasks: &Vec<Task>,
-    now: chrono::DateTime<Utc>,
+    now: chrono::DateTime<Tz>,
 ) -> Vec<&Task> {
     let hour = chrono::Duration::hours(1);
 
@@ -39,7 +39,7 @@ pub fn display_upcoming_tasks(upcoming: &Vec<&Task>) {
 #[cfg(test)]
 mod recurring_task_tests {
     use crate::{get_tasks_occurring_in_the_next_hour, Task};
-    use chrono::{DateTime, TimeZone, Utc};
+    use chrono::TimeZone;
 
     #[test]
     fn test_includes_task_that_occurs_in_the_next_hour() {
@@ -48,7 +48,9 @@ mod recurring_task_tests {
             cron_expression: every_day_at_ten,
             task_name: "Get new light jacket".to_owned(),
         }];
-        let the_perfect_date_morning: DateTime<Utc> = Utc.ymd(2020, 4, 25).and_hms(9, 10, 11);
+        let the_perfect_date_morning = chrono_tz::America::Toronto
+            .ymd(2020, 4, 25)
+            .and_hms(9, 10, 11);
         let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, the_perfect_date_morning);
         assert_eq!(upcoming.len(), 1);
     }
@@ -60,7 +62,9 @@ mod recurring_task_tests {
             cron_expression: every_day_at_ten,
             task_name: "Get new light jacket".to_owned(),
         }];
-        let the_perfect_date_afternoon: DateTime<Utc> = Utc.ymd(2020, 4, 25).and_hms(16, 21, 00);
+        let the_perfect_date_afternoon = chrono_tz::America::Toronto
+            .ymd(2020, 4, 25)
+            .and_hms(16, 21, 00);
         let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, the_perfect_date_afternoon);
         assert_eq!(upcoming.len(), 0);
     }

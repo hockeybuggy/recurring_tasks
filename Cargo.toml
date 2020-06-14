@@ -15,3 +15,4 @@ path = "src/bin.rs"
 [dependencies]
 cron = "0.6"
 chrono = "0.4"
+chrono-tz = "0.5"
