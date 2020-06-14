@@ -3,7 +3,7 @@ name: Send Email
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '* * * * *'
+    - cron:  '*/10 * * * *'
 
 jobs:
   send-email:
