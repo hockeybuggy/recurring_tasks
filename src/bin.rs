@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use chrono::{DateTime, Utc};
 use chrono_tz::Tz;
 use recurring_tasks::{display_upcoming_tasks, get_tasks_occurring_in_the_next_hour, Task};
@@ -56,7 +58,9 @@ fn main() {
     let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, local_datetime);
 
     if upcoming.len() == 0 {
-        println!("There are no upcoming tasks.");
+        return std::io::stderr()
+            .write_all(b"There are no upcoming tasks.")
+            .unwrap();
     } else {
         display_upcoming_tasks(&upcoming);
     }
