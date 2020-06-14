@@ -7,10 +7,11 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const programOutput = fs.readFileSync('output.txt');
 
+const now = new Date(Date.now());
 const msg = {
   to: 'hockeybuggy@gmail.com',
   from: 'hockeybuggy+recurring@gmail.com',
-  subject: 'Recurring tasks for YYYY-MM-DD',
+  subject: `Recurring tasks for ${now.toDateString()}`,
   text: programOutput.toString(),
 };
 

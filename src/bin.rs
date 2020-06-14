@@ -53,9 +53,10 @@ fn main() {
     let now: DateTime<Utc> = Utc::now();
     let local_datetime = now.with_timezone(&local_timezone);
 
+    let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, local_datetime);
+
     println!("It is now {:?} in UTC", now);
     println!("      and {:?} in {:?}", local_datetime, local_timezone);
-
-    let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, local_datetime);
+    println!("");
     display_upcoming_tasks(&upcoming);
 }
