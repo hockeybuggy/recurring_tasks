@@ -12,7 +12,6 @@ const msg = {
   from: 'hockeybuggy+recurring@gmail.com',
   subject: 'Recurring tasks for YYYY-MM-DD',
   text: programOutput.toString(),
-  html: `<p>${programOutput.toString()}</p>`,
 };
 
 sgMail
