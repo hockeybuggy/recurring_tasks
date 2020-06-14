@@ -1,8 +1,8 @@
 extern crate chrono;
 extern crate cron;
-
 use chrono_tz::Tz;
 use cron::Schedule;
+use std::io::Write;
 use std::str::FromStr;
 
 #[derive(Debug)]
@@ -30,9 +30,13 @@ pub fn get_tasks_occurring_in_the_next_hour(
 }
 
 pub fn display_upcoming_tasks(upcoming: &Vec<&Task>) {
-    println!("These are the upcoming tasks:");
-    for task in upcoming {
-        println!("\t{}", task.task_name);
+    if upcoming.len() == 0 {
+        println!("There are no upcoming tasks.");
+    } else {
+        println!("These are the upcoming tasks:");
+        for task in upcoming {
+            println!("    - {}", task.task_name);
+        }
     }
 }
 
