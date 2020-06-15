@@ -1,62 +1,46 @@
-use std::io::Write;
+use std::path::Path;
 
+extern crate clap;
 use chrono::{DateTime, Utc};
-use chrono_tz::Tz;
-use recurring_tasks::{display_upcoming_tasks, get_tasks_occurring_in_the_next_hour, Task};
+use clap::{App, Arg};
+
+use recurring_tasks::{
+    display_upcoming_tasks, get_tasks_occurring_within_duration, parse_toml_file,
+};
+
+const ABOUT_BLERB: &str = "
+This project outputs a task list given a schedule.
+";
 
 fn main() {
-    // TODO I hope to make this an external file that can be read in.
-    let local_timezone: Tz = "America/Toronto".parse().unwrap();
-    let tasks: Vec<Task> = vec![
-        Task {
-            cron_expression: "0 0 3 * * * *".to_owned(),
-            task_name: "Drink water (min 1 litre)".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 * * * 1-5 *".to_owned(),
-            task_name: "Brush teeth".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 14 * * 1-5 *".to_owned(),
-            task_name: "Light therapy".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 16 * * 1-5 *".to_owned(),
-            task_name: "Garbage, Green bin".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 17 * * 1-5 *".to_owned(),
-            task_name: "Recycling, Green bin".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 18 * * 1-5 *".to_owned(),
-            task_name: "Pay rent".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 20 * * * *".to_owned(),
-            task_name: "Pay joint account contribution".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 21 * * * *".to_owned(),
-            task_name: "Pay credit card".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 23 * * * *".to_owned(),
-            task_name: "Pay taxes".to_owned(),
-        },
-        Task {
-            cron_expression: "0 0 22 * * * *".to_owned(),
-            task_name: "Rotate passwords".to_owned(),
-        },
-    ];
+    let matches = App::new("ValueType Codegen")
+        .version("0.1.0")
+        .author("Douglas Anderson <hockeybuggy@gmail.com>")
+        .about(ABOUT_BLERB)
+        .arg(
+            Arg::with_name("source")
+                .help("Sets the input file to use")
+                .takes_value(true)
+                .short("s")
+                .long("source")
+                .required(true),
+        )
+        .get_matches();
+
+    let source_path = Path::new(matches.value_of("source").unwrap());
+    let (timezone, tasks) = parse_toml_file(source_path).unwrap();
 
     let now: DateTime<Utc> = Utc::now();
-    let local_datetime = now.with_timezone(&local_timezone);
+    let local_datetime = now.with_timezone(&timezone);
 
-    let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, local_datetime);
+    let day = chrono::Duration::days(1);
+    let upcoming = get_tasks_occurring_within_duration(&tasks, local_datetime, day);
 
-    println!("It is now {:?} in UTC", now);
-    println!("      and {:?} in {:?}", local_datetime, local_timezone);
+    println!(
+        "Tasks between:\n\t- {:?}\n\t- {:?}",
+        local_datetime,
+        local_datetime + day
+    );
     println!("");
     display_upcoming_tasks(&upcoming);
 }

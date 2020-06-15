@@ -1,0 +1,53 @@
+timezone = "America/Toronto"
+#                  ┌───────────── sec (0 - 59)
+#                  │ ┌───────────── minute (0 - 59)
+#                  │ │ ┌───────────── hour (0 - 23)
+#                  │ │ │ ┌───────────── day of the month (1 - 31)
+#                  │ │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+#                  │ │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+#                  │ │ │ │ │ │ ┌───────────── year
+#                  │ │ │ │ │ │ │
+#                  │ │ │ │ │ │ │
+#                  * * * * * * *
+
+[tasks]
+
+[tasks.water]
+name = 'Drink water (min 1 litre)'
+cron_expression = '0 30 9 * * * *'
+
+[tasks.teeth]
+name = 'Brush teeth x2'
+cron_expression = '0 30 9 * * * *'
+
+[tasks.light_therapy]
+name = "Light therapy x1"
+cron_expression = '0 30 9 * * * *'
+
+[tasks.recycling_green_bin]
+cron_expression = "0 30 9 1-7,15-21 * 3 *"
+name = "Garbage, Green bin"
+
+[tasks.garbage_green_bin]
+cron_expression = "0 30 9 8-15,22-31 * 3 *"
+name = "Recycling, Green bin"
+
+[tasks.rent]
+cron_expression = "0 30 9 28 * * *"
+name = "Pay rent"
+
+[tasks.joint_account]
+cron_expression = "0 30 9 28 * * *"
+name = "Pay joint account contribution"
+
+[tasks.credit_card]
+cron_expression = "0 30 9 28 * * *"
+name = "Pay credit card"
+
+[tasks.taxes]
+cron_expression = "0 30 9 15 3 * *"
+name = "Pay taxes"
+
+[tasks.passwords]
+cron_expression = "0 30 9 15 12 * *"
+name = "Rotate passwords"
