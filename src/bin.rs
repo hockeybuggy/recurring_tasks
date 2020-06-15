@@ -5,7 +5,7 @@ use chrono::{DateTime, Utc};
 use clap::{App, Arg};
 
 use recurring_tasks::{
-    display_upcoming_tasks, get_tasks_occurring_in_the_next_hour, parse_toml_file,
+    display_upcoming_tasks, get_tasks_occurring_within_duration, parse_toml_file,
 };
 
 const ABOUT_BLERB: &str = "
@@ -34,7 +34,8 @@ fn main() {
 
     let local_datetime = now.with_timezone(&timezone);
 
-    let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, local_datetime);
+    let day = chrono::Duration::days(1);
+    let upcoming = get_tasks_occurring_within_duration(&tasks, local_datetime, day);
 
     println!("It is now {:?} in UTC", now);
     println!("      and {:?} in {:?}", local_datetime, timezone);

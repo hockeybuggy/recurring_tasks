@@ -15,17 +15,16 @@ pub struct Task {
     pub task_name: String,
 }
 
-pub fn get_tasks_occurring_in_the_next_hour(
+pub fn get_tasks_occurring_within_duration(
     tasks: &Vec<Task>,
     now: chrono::DateTime<Tz>,
+    duration: chrono::Duration,
 ) -> Vec<&Task> {
-    let hour = chrono::Duration::hours(1);
-
     let mut upcoming: Vec<&Task> = Vec::new();
     for task in tasks {
         let schedule = Schedule::from_str(&task.cron_expression).unwrap();
         for next_occurance in schedule.after(&now).take(1) {
-            if next_occurance > now && next_occurance <= now + hour {
+            if next_occurance > now && next_occurance <= now + duration {
                 upcoming.push(task);
             }
         }
