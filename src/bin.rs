@@ -26,19 +26,21 @@ fn main() {
                 .required(true),
         )
         .get_matches();
-    let source_path = Path::new(matches.value_of("source").unwrap());
-    // TODO I hope to make this an external file that can be read in.
-    let now: DateTime<Utc> = Utc::now();
 
+    let source_path = Path::new(matches.value_of("source").unwrap());
     let (timezone, tasks) = parse_toml_file(source_path).unwrap();
 
+    let now: DateTime<Utc> = Utc::now();
     let local_datetime = now.with_timezone(&timezone);
 
     let day = chrono::Duration::days(1);
     let upcoming = get_tasks_occurring_within_duration(&tasks, local_datetime, day);
 
-    println!("It is now {:?} in UTC", now);
-    println!("      and {:?} in {:?}", local_datetime, timezone);
+    println!(
+        "Tasks between:\n\t- {:?}\n\t- {:?}",
+        local_datetime,
+        local_datetime + day
+    );
     println!("");
     display_upcoming_tasks(&upcoming);
 }
