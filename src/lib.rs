@@ -84,11 +84,12 @@ pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>),
 
 #[cfg(test)]
 mod recurring_task_tests {
-    use crate::{get_tasks_occurring_in_the_next_hour, Task};
+    use crate::{get_tasks_occurring_within_duration, Task};
     use chrono::TimeZone;
 
     #[test]
     fn test_includes_task_that_occurs_in_the_next_hour() {
+        let hour = chrono::Duration::hours(1);
         let every_day_at_ten = "0 0 10 * * * *".to_owned();
         let tasks = vec![Task {
             cron_expression: every_day_at_ten,
@@ -97,12 +98,13 @@ mod recurring_task_tests {
         let the_perfect_date_morning = chrono_tz::America::Toronto
             .ymd(2020, 4, 25)
             .and_hms(9, 10, 11);
-        let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, the_perfect_date_morning);
+        let upcoming = get_tasks_occurring_within_duration(&tasks, the_perfect_date_morning, hour);
         assert_eq!(upcoming.len(), 1);
     }
 
     #[test]
     fn test_includes_task_that_does_not_occur_in_the_next_hour() {
+        let hour = chrono::Duration::hours(1);
         let every_day_at_ten = "0 0 16 * * 1-5 *".to_owned();
         let tasks = vec![Task {
             cron_expression: every_day_at_ten,
@@ -111,7 +113,8 @@ mod recurring_task_tests {
         let the_perfect_date_afternoon = chrono_tz::America::Toronto
             .ymd(2020, 4, 25)
             .and_hms(16, 21, 00);
-        let upcoming = get_tasks_occurring_in_the_next_hour(&tasks, the_perfect_date_afternoon);
+        let upcoming =
+            get_tasks_occurring_within_duration(&tasks, the_perfect_date_afternoon, hour);
         assert_eq!(upcoming.len(), 0);
     }
 }
