@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run the program
-      run: cargo run > output.txt
+      run: cargo run -- --source tasks/personal.toml > output.txt
 
     - name: SendGrid
       uses: peter-evans/sendgrid-action@v1
