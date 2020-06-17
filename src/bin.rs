@@ -1,3 +1,5 @@
+use std::fs::File;
+use std::io::prelude::*;
 use std::path::Path;
 
 extern crate clap;
@@ -25,6 +27,15 @@ fn main() {
         .get_matches();
 
     let source_path = Path::new(matches.value_of("tasks").unwrap());
+    println!("\nUsing input file: {}\n", source_path.to_str().unwrap());
 
-    run_from_task_file(source_path);
+    let (subject, body) = run_from_task_file(source_path);
+
+    let mut subject_file = File::create("subject.txt").unwrap();
+    println!("Using output subject file: subject.txt");
+    subject_file.write_all(&subject.as_bytes()).unwrap();
+
+    let mut body_file = File::create("body.txt").unwrap();
+    println!("Using output body file: body.txt");
+    body_file.write_all(&body.as_bytes()).unwrap();
 }

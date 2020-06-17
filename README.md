@@ -27,6 +27,9 @@ cargo test
 cargo run -- --tasks tasks/example.toml
 ```
 
+This will output a `body.txt` and a `subject.txt`. Within this repo that's used
+to send an email.
+
 
 ## Cron Cheat sheet
 
