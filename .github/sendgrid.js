@@ -6,7 +6,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const subjectBuffer = fs.readFileSync('subject.txt');
-const bodyRawBuffer = fs.readFileSync('body.txt');
+const bodyRawBuffer = fs.readFileSync('body.md');
 const bodyHtmlBuffer = fs.readFileSync('body.html');
 
 const now = new Date(Date.now());

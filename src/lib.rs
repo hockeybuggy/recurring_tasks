@@ -38,10 +38,10 @@ pub fn format_upcoming_tasks_into_message(upcoming: &Vec<&Task>) -> String {
     if upcoming.len() == 0 {
         msg.push_str(&format!("There are no upcoming tasks.\n"));
     } else {
-        msg.push_str(&format!("These are the upcoming tasks:\n"));
+        msg.push_str(&format!("These are the upcoming tasks:\n\n"));
 
         for task in upcoming {
-            msg.push_str(&format!("    - {}\n", task.task_name));
+            msg.push_str(&format!(" - {}\n", task.task_name));
         }
     }
     return msg;
@@ -104,7 +104,7 @@ pub fn run_from_task_file(source_path: &std::path::Path) -> (String, String) {
     let upcoming = get_tasks_occurring_within_duration(&tasks, local_datetime, day);
 
     let time_message = format!(
-        "Tasks between:\n\t- {}\n\t- {}\n",
+        "Tasks between:\n\n - {}\n - {}\n",
         local_datetime.format("%F %T %:z"),
         (local_datetime + day).format("%F %T %:z")
     );
