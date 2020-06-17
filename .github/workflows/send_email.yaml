@@ -3,7 +3,7 @@ name: Send Email
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 8 * * *'
+    - cron:  '0,20,40 * * * *'
 
 jobs:
   send-email:
@@ -13,9 +13,6 @@ jobs:
 
     - name: Run the program
       run: cargo run -- --tasks tasks/personal.toml
-
-    - name: Run the program
-      run: pip install commonmark && cmark body.txt -o body.html
 
     - name: SendGrid
       uses: peter-evans/sendgrid-action@v1

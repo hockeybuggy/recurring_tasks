@@ -14,8 +14,9 @@ name = "recurring_tasks_bin"
 path = "src/bin.rs"
 
 [dependencies]
-clap = "2.33"
-cron = "0.6"
 chrono = "0.4"
 chrono-tz = "0.5"
+clap = "2.33"
+cron = "0.6"
+pulldown-cmark = { version = "0.7", default-features = false }
 toml = "0.5"

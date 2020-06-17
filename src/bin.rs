@@ -5,6 +5,8 @@ use std::path::Path;
 extern crate clap;
 use clap::{App, Arg};
 
+use pulldown_cmark::{html, Options, Parser};
+
 use recurring_tasks::run_from_task_file;
 
 const ABOUT_BLERB: &str = "
@@ -35,7 +37,21 @@ fn main() {
     println!("Using output subject file: subject.txt");
     subject_file.write_all(&subject.as_bytes()).unwrap();
 
-    let mut body_file = File::create("body.txt").unwrap();
-    println!("Using output body file: body.txt");
+    let mut body_file = File::create("body.md").unwrap();
+    println!("Using output body file: body.md");
     body_file.write_all(&body.as_bytes()).unwrap();
+
+    // Set up options and parser. Strikethroughs are not part of the CommonMark standard
+    // and we therefore must enable it explicitly.
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_STRIKETHROUGH);
+
+    let parser = Parser::new_ext(&body, options);
+
+    let mut html_output = String::new();
+    html::push_html(&mut html_output, parser);
+
+    let mut body_file = File::create("body.html").unwrap();
+    println!("Using output body html file: body.html");
+    body_file.write_all(&html_output.as_bytes()).unwrap();
 }
