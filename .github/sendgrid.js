@@ -6,14 +6,16 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const subjectBuffer = fs.readFileSync('subject.txt');
-const bodyBuffer = fs.readFileSync('body.txt');
+const bodyRawBuffer = fs.readFileSync('body.txt');
+const bodyHtmlBuffer = fs.readFileSync('body.html');
 
 const now = new Date(Date.now());
 const msg = {
   to: 'hockeybuggy@gmail.com',
   from: 'hockeybuggy+recurring@gmail.com',
   subject: subjectBuffer.toString(),
-  text: bodyBuffer.toString(),
+  text: bodyRawBuffer.toString(),
+  html: bodyHtmlBuffer.toString(),
 };
 
 sgMail
