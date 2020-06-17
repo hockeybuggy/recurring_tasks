@@ -33,19 +33,21 @@ pub fn get_tasks_occurring_within_duration(
     return upcoming;
 }
 
-pub fn display_upcoming_tasks(upcoming: &Vec<&Task>) {
+pub fn format_upcoming_tasks_into_message(upcoming: &Vec<&Task>) -> String {
+    let mut msg = String::from("");
     if upcoming.len() == 0 {
-        println!("There are no upcoming tasks.");
+        msg.push_str(&format!("There are no upcoming tasks.\n"));
     } else {
-        println!("These are the upcoming tasks:");
+        msg.push_str(&format!("These are the upcoming tasks:\n"));
+
         for task in upcoming {
-            println!("    - {}", task.task_name);
+            msg.push_str(&format!("    - {}\n", task.task_name));
         }
     }
+    return msg;
 }
 
 pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>), String> {
-    println!("Using input file: {}", source_path.to_str().unwrap());
     let contents = fs::read_to_string(source_path).expect("Unable to read the source file");
     let parsed: Toml = match contents.parse() {
         Ok(toml) => toml,
@@ -83,7 +85,7 @@ pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>),
     return Ok((local_timezone, tasks));
 }
 
-pub fn run_from_task_file(source_path: &std::path::Path) {
+pub fn run_from_task_file(source_path: &std::path::Path) -> (String, String) {
     let (timezone, tasks) = parse_toml_file(&source_path).unwrap();
 
     let now: DateTime<Utc> = Utc::now();
@@ -101,13 +103,18 @@ pub fn run_from_task_file(source_path: &std::path::Path) {
     let day = chrono::Duration::days(1) - chrono::Duration::seconds(1);
     let upcoming = get_tasks_occurring_within_duration(&tasks, local_datetime, day);
 
-    println!(
-        "Tasks between:\n\t- {}\n\t- {}",
+    let time_message = format!(
+        "Tasks between:\n\t- {}\n\t- {}\n",
         local_datetime.format("%F %T %:z"),
         (local_datetime + day).format("%F %T %:z")
     );
-    println!("");
-    display_upcoming_tasks(&upcoming);
+    let message = format!(
+        "{}\n{}",
+        time_message,
+        format_upcoming_tasks_into_message(&upcoming)
+    );
+    let subject = format!("Recurring tasks for {}", local_datetime.format("%F"));
+    return (subject, message);
 }
 
 #[cfg(test)]

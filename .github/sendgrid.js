@@ -5,14 +5,15 @@ const fs = require('fs');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const programOutput = fs.readFileSync('output.txt');
+const subjectBuffer = fs.readFileSync('subject.txt');
+const bodyBuffer = fs.readFileSync('body.txt');
 
 const now = new Date(Date.now());
 const msg = {
   to: 'hockeybuggy@gmail.com',
   from: 'hockeybuggy+recurring@gmail.com',
-  subject: `Recurring tasks for ${now.toDateString()}`,
-  text: programOutput.toString(),
+  subject: subjectBuffer.toString(),
+  text: bodyBuffer.toString(),
 };
 
 sgMail
