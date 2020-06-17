@@ -51,3 +51,11 @@ name = "Pay taxes"
 [tasks.passwords]
 cron_expression = "0 30 9 15 12 * *"
 name = "Rotate passwords"
+
+[tasks.personal_goals]
+cron_expression = "0 30 9 8-15 * 6 *"
+name = "Check personal goals trello"
+
+[tasks.book_list]
+cron_expression = "0 30 9 15-21 * 6 *"
+name = "Update book list"
