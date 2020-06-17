@@ -4,6 +4,7 @@ use std::str::FromStr;
 
 extern crate chrono;
 extern crate cron;
+use chrono::{DateTime, Timelike, Utc};
 use chrono_tz::Tz;
 use cron::Schedule;
 
@@ -80,6 +81,33 @@ pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>),
         });
     }
     return Ok((local_timezone, tasks));
+}
+
+pub fn run_from_task_file(source_path: &std::path::Path) {
+    let (timezone, tasks) = parse_toml_file(&source_path).unwrap();
+
+    let now: DateTime<Utc> = Utc::now();
+    let local_datetime = now
+        .with_timezone(&timezone)
+        .with_hour(0)
+        .unwrap()
+        .with_minute(0)
+        .unwrap()
+        .with_second(0)
+        .unwrap()
+        .with_nanosecond(0)
+        .unwrap();
+
+    let day = chrono::Duration::days(1) - chrono::Duration::seconds(1);
+    let upcoming = get_tasks_occurring_within_duration(&tasks, local_datetime, day);
+
+    println!(
+        "Tasks between:\n\t- {}\n\t- {}",
+        local_datetime.format("%F %T %:z"),
+        (local_datetime + day).format("%F %T %:z")
+    );
+    println!("");
+    display_upcoming_tasks(&upcoming);
 }
 
 #[cfg(test)]

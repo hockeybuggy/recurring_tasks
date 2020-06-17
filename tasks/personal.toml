@@ -25,11 +25,11 @@ name = "Light therapy x1"
 cron_expression = '0 30 9 * * * *'
 
 [tasks.recycling_green_bin]
-cron_expression = "0 30 9 1-7,15-21 * 3 *"
+cron_expression = "0 30 9 1-7,15-21 * 4 *"
 name = "Garbage, Green bin"
 
 [tasks.garbage_green_bin]
-cron_expression = "0 30 9 8-15,22-31 * 3 *"
+cron_expression = "0 30 9 8-15,22-31 * 4 *"
 name = "Recycling, Green bin"
 
 [tasks.rent]

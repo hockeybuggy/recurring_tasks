@@ -24,7 +24,7 @@ cargo test
 ## Running the program
 
 ```bash
-cargo run -- --source tasks/example.toml
+cargo run -- --tasks tasks/example.toml
 ```
 
 
