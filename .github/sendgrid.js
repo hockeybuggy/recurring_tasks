@@ -12,7 +12,7 @@ const bodyHtmlBuffer = fs.readFileSync('body.html');
 const now = new Date(Date.now());
 const msg = {
   to: 'hockeybuggy@gmail.com',
-  from: 'hockeybuggy+recurring@gmail.com',
+  from: 'recurring@hockeybuggy.com',
   subject: subjectBuffer.toString(),
   text: bodyRawBuffer.toString(),
   html: bodyHtmlBuffer.toString(),
