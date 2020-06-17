@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run the program
-      run: cargo run -- --tasks tasks/personal.toml > output.txt
+      run: cargo run -- --tasks tasks/personal.toml
 
     - name: Run the program
       run: pip install commonmark && cmark body.txt -o body.html
