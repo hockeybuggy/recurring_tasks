@@ -59,3 +59,7 @@ name = "Check personal goals trello"
 [tasks.book_list]
 cron_expression = "0 30 9 15-21 * 6 *"
 name = "Update book list"
+
+[tasks.daybook_setup]
+cron_expression = "0 30 9 * * 5 *"
+name = "Setup daybook for next week."
