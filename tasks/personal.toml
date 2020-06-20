@@ -16,13 +16,9 @@ timezone = "America/Toronto"
 name = 'Drink water (min 1 litre)'
 cron_expression = '0 30 9 * * * *'
 
-[tasks.teeth]
-name = 'Brush teeth x2'
-cron_expression = '0 30 9 * * * *'
-
 [tasks.light_therapy]
 name = "Light therapy x1"
-cron_expression = '0 30 9 * * * *'
+cron_expression = '0 30 9 * * 1-5 *'
 
 [tasks.recycling_green_bin]
 cron_expression = "0 30 9 1-7,15-21 * 4 *"
