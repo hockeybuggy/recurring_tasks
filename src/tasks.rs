@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct Task {
     pub cron_expression: String,
     pub task_name: String,
