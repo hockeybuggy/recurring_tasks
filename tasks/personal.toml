@@ -10,8 +10,6 @@ timezone = "America/Toronto"
 #                  │ │ │ │ │ │ │
 #                  * * * * * * *
 
-[tasks]
-
 [tasks.water]
 name = 'Drink water (min 1 litre)'
 cron_expression = '0 30 9 * * * *'
@@ -59,3 +57,10 @@ name = "Update book list"
 [tasks.daybook_setup]
 cron_expression = "0 30 9 * * 5 *"
 name = "Setup daybook for next week."
+
+
+# Using this an example because I don't want to commit a real birthday into
+# what may become a public repo.
+[birthdays.canada]
+name = "Canada's birthday"
+cron_expression = '0 * * 1 7 * *'
