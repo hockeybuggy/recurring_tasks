@@ -24,20 +24,10 @@ pub fn run_from_task_file(source_path: &std::path::Path) -> (String, String) {
         .unwrap();
 
     let day = chrono::Duration::days(1) - chrono::Duration::seconds(1);
-    let upcoming = crate::tasks::get_tasks_occurring_within_duration(&tasks, local_datetime, day);
+    let upcoming = crate::tasks::get_tasks_occurring_within_duration(&tasks, &local_datetime, &day);
 
-    // TODO Move format_output
-    let time_message = format!(
-        "Tasks between:\n\n - {}\n - {}\n",
-        local_datetime.format("%F %T %:z"),
-        (local_datetime + day).format("%F %T %:z")
-    );
-    let message = format!(
-        "{}\n{}",
-        time_message,
-        crate::format_output::format_upcoming_tasks_into_message(&upcoming)
-    );
-    let subject = format!("Recurring tasks for {}", local_datetime.format("%F"));
+    let message = crate::format_output::format_message(&upcoming, &local_datetime, &day);
+    let subject = crate::format_output::format_subject(&upcoming, &local_datetime, &day);
     return (subject, message);
 }
 

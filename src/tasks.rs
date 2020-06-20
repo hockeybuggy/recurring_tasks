@@ -7,16 +7,16 @@ pub struct Task {
 }
 
 /// Filters all tasks to just tasks ocurring within the period of `now` and `now + duration`.
-pub fn get_tasks_occurring_within_duration(
-    tasks: &Vec<Task>,
-    now: chrono::DateTime<chrono_tz::Tz>,
-    duration: chrono::Duration,
-) -> Vec<&Task> {
+pub fn get_tasks_occurring_within_duration<'a>(
+    tasks: &'a Vec<Task>,
+    now: &'a chrono::DateTime<chrono_tz::Tz>,
+    duration: &'a chrono::Duration,
+) -> Vec<&'a Task> {
     let mut upcoming: Vec<&Task> = Vec::new();
     for task in tasks {
         let schedule = cron::Schedule::from_str(&task.cron_expression).unwrap();
         for next_occurance in schedule.after(&now).take(1) {
-            if next_occurance > now && next_occurance <= now + duration {
+            if next_occurance > *now && next_occurance <= *now + *duration {
                 upcoming.push(task);
             }
         }
@@ -40,7 +40,10 @@ mod tasks_tests {
         let the_perfect_date_morning = chrono_tz::America::Toronto
             .ymd(2020, 4, 25)
             .and_hms(9, 10, 11);
-        let upcoming = get_tasks_occurring_within_duration(&tasks, the_perfect_date_morning, hour);
+
+        let upcoming =
+            get_tasks_occurring_within_duration(&tasks, &the_perfect_date_morning, &hour);
+
         assert_eq!(upcoming.len(), 1);
     }
 
@@ -55,8 +58,10 @@ mod tasks_tests {
         let the_perfect_date_afternoon = chrono_tz::America::Toronto
             .ymd(2020, 4, 25)
             .and_hms(16, 21, 00);
+
         let upcoming =
-            get_tasks_occurring_within_duration(&tasks, the_perfect_date_afternoon, hour);
+            get_tasks_occurring_within_duration(&tasks, &the_perfect_date_afternoon, &hour);
+
         assert_eq!(upcoming.len(), 0);
     }
 }
