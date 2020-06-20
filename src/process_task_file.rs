@@ -38,20 +38,44 @@ pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>),
     }
 
     for tasks_table in tables {
-        for (_task_name, task_table) in tasks_table.1.as_table().unwrap() {
+        let top_level_table_name = tasks_table.0;
+        for (task_table_name, task_table) in tasks_table.1.as_table().unwrap() {
+            let maybe_task_name = task_table.get("name");
+            if maybe_task_name.is_none() {
+                return Err(format!(
+                    "Task `{}.{}` is missing a `name`.",
+                    top_level_table_name, task_table_name
+                ));
+            }
+            let maybe_task_name_str = maybe_task_name.unwrap().as_str();
+            if maybe_task_name_str.is_none() {
+                return Err(format!(
+                    "Task `{}.{}` has a `name` field that is not a string.",
+                    top_level_table_name, task_table_name
+                ));
+            }
+            let task_name = maybe_task_name_str.unwrap().to_string();
+
+            let maybe_cron_expression = task_table.get("cron_expression");
+            if maybe_cron_expression.is_none() {
+                return Err(format!(
+                    "Task `{}.{}` is missing a `cron_expression`.",
+                    top_level_table_name, task_table_name
+                ));
+            }
+            let maybe_cron_expression_str = maybe_cron_expression.unwrap().as_str();
+            if maybe_cron_expression_str.is_none() {
+                return Err(format!(
+                    "Task `{}.{}` has a `cron_expression` field that is not a string.",
+                    top_level_table_name, task_table_name
+                ));
+            }
+            let cron_expression = maybe_cron_expression_str.unwrap().to_string();
+            // TODO maybe validate that this is a valid cron string
+
             tasks.push(Task {
-                task_name: task_table
-                    .get("name")
-                    .unwrap()
-                    .as_str()
-                    .unwrap()
-                    .to_string(),
-                cron_expression: task_table
-                    .get("cron_expression")
-                    .unwrap()
-                    .as_str()
-                    .unwrap()
-                    .to_string(),
+                task_name,
+                cron_expression,
             });
         }
     }
@@ -224,6 +248,85 @@ timezone = 'America/Toronto'
         let err = parse_toml_file(&source_path).unwrap_err();
 
         let expected_err = "Could not find tasks.";
+        assert_eq!(err, expected_err);
+    }
+
+    #[test]
+    fn test_parse_toml_file_task_with_missing_name() {
+        let source_path = write_to_tempfile(
+            "task_with_missing_name.toml",
+            "
+timezone = 'America/Toronto'
+
+# This task file has a task without a name
+[tasks.some_task]
+cron_expression = '* * * * * * *'
+",
+        );
+
+        let err = parse_toml_file(&source_path).unwrap_err();
+
+        let expected_err = "Task `tasks.some_task` is missing a `name`.";
+        assert_eq!(err, expected_err);
+    }
+
+    #[test]
+    fn test_parse_toml_file_task_with_a_non_string_name() {
+        let source_path = write_to_tempfile(
+            "task_with_non_string_name.toml",
+            "
+timezone = 'America/Toronto'
+
+# This task file has a task a non string name
+[tasks.some_task]
+name = 1
+cron_expression = '* * * * * * *'
+",
+        );
+
+        let err = parse_toml_file(&source_path).unwrap_err();
+
+        let expected_err = "Task `tasks.some_task` has a `name` field that is not a string.";
+        assert_eq!(err, expected_err);
+    }
+
+    #[test]
+    fn test_parse_toml_file_task_with_missing_cron_expression() {
+        let source_path = write_to_tempfile(
+            "task_with_missing_cron_expression.toml",
+            "
+timezone = 'America/Toronto'
+
+# This task file has a task without a cron_expression
+[tasks.some_task]
+name = 'Some task'
+",
+        );
+
+        let err = parse_toml_file(&source_path).unwrap_err();
+
+        let expected_err = "Task `tasks.some_task` is missing a `cron_expression`.";
+        assert_eq!(err, expected_err);
+    }
+
+    #[test]
+    fn test_parse_toml_file_task_with_a_non_string_cron_expression() {
+        let source_path = write_to_tempfile(
+            "task_with_non_string_cron_expression.toml",
+            "
+timezone = 'America/Toronto'
+
+# This task file has a task cron_expression that is not a string
+[tasks.some_task]
+name = 'Some task'
+cron_expression = 1
+",
+        );
+
+        let err = parse_toml_file(&source_path).unwrap_err();
+
+        let expected_err =
+            "Task `tasks.some_task` has a `cron_expression` field that is not a string.";
         assert_eq!(err, expected_err);
     }
 }
