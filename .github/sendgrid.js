@@ -13,6 +13,7 @@ const now = new Date(Date.now());
 const msg = {
   to: 'hockeybuggy@gmail.com',
   from: 'recurring@hockeybuggy.com',
+  'reply_to': 'hockeybuggy+recurring@gmail.com',
   subject: subjectBuffer.toString(),
   text: bodyRawBuffer.toString(),
   html: bodyHtmlBuffer.toString(),
