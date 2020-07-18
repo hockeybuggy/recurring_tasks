@@ -58,6 +58,10 @@ name = "Update book list"
 cron_expression = "0 30 9 * * 6 *"
 name = "Setup daybook for next week."
 
+[tasks.cedar_meds]
+cron_expression = "0 30 9 1 * * *"
+name = "Give Cedar his Fea and tick medication"
+
 
 # Using this an example because I don't want to commit a real birthday into
 # what may become a public repo.
