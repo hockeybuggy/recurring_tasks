@@ -5,13 +5,14 @@
 This project sends reminders to myself on a schedule.
 
 
-## The Plan
+## How this works
 
-The intention is for this repo to run a program on a very simply cron that will
-run at a normal interval (such as hourly). This cron will run a program that
-checks a list of tasks which each have their own schedule. If that task will
-next occur within the first cron's interval it will be included in a
-notification.
+This repo works using a counterpart private repository. This repository's
+concern is related to finding upcoming tasks given a task file of a specific
+format.
+
+The counterpart private repository will use this repository, but it's concerns
+are related to periodically running and notifying someone..
 
 
 ## Running tests
@@ -29,19 +30,3 @@ cargo run -- --tasks tasks/example.toml
 
 This will output a `body.md`, `body.html` and a `subject.txt`. This files are
 then used for sending emails.
-
-
-## Cron Cheat sheet
-
-```
-  ┌───────────── sec (0 - 59)
-  │ ┌───────────── minute (0 - 59)
-  │ │ ┌───────────── hour (0 - 23)
-  │ │ │ ┌───────────── day of the month (1 - 31)
-  │ │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
-  │ │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
-  │ │ │ │ │ │ ┌───────────── year
-  │ │ │ │ │ │ │
-  │ │ │ │ │ │ │
-  * * * * * * *
-```

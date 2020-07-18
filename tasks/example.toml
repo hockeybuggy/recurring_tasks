@@ -1,0 +1,23 @@
+timezone = "America/Toronto"
+#                  ┌───────────── sec (0 - 59)
+#                  │ ┌───────────── minute (0 - 59)
+#                  │ │ ┌───────────── hour (0 - 23)
+#                  │ │ │ ┌───────────── day of the month (1 - 31)
+#                  │ │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+#                  │ │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+#                  │ │ │ │ │ │ ┌───────────── year
+#                  │ │ │ │ │ │ │
+#                  │ │ │ │ │ │ │
+#                  * * * * * * *
+
+[tasks.recycling_green_bin]
+cron_expression = "0 30 9 1-7,16-21 * 4 *"
+name = "Take out the Garbage, Green bin"
+
+[tasks.garbage_green_bin]
+cron_expression = "0 30 9 8-15,22-31 * 4 *"
+name = "Take out the Recycling, Green bin"
+
+[tasks.rent]
+cron_expression = "0 30 9 28 * * *"
+name = "Pay rent"
