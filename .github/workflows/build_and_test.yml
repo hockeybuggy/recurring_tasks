@@ -15,6 +15,5 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
 
-    - name: Run the program to validate the tasks file
-      run: cargo run -- --tasks tasks/personal.toml
-
+    - name: Run the program to validate the example tasks file
+      run: cargo run -- --tasks tasks/example.toml
