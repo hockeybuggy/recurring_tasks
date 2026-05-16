@@ -9,7 +9,7 @@ mod tasks;
 use crate::tasks::Task;
 
 pub fn run_from_task_file(source_path: &std::path::Path) -> (String, String) {
-    let (timezone, tasks) = crate::process_task_file::parse_toml_file(&source_path).unwrap();
+    let (timezone, tasks) = crate::process_task_file::parse_toml_file(source_path).unwrap();
 
     let now: DateTime<Utc> = Utc::now();
     let local_datetime = now
@@ -28,7 +28,7 @@ pub fn run_from_task_file(source_path: &std::path::Path) -> (String, String) {
 
     let message = crate::format_output::format_message(&upcoming, &local_datetime, &day);
     let subject = crate::format_output::format_subject(&upcoming, &local_datetime, &day);
-    return (subject, message);
+    (subject, message)
 }
 
 #[cfg(test)]

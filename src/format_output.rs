@@ -9,21 +9,21 @@ fn format_time_span(
         start_datetime.format("%F %T %:z"),
         (*start_datetime + *duration).format("%F %T %:z")
     );
-    return time_message;
+    time_message
 }
 
 fn format_upcoming_tasks_into_message(upcoming: &Vec<&Task>) -> String {
     let mut msg = String::from("");
-    if upcoming.len() == 0 {
-        msg.push_str(&format!("There are no upcoming tasks.\n"));
+    if upcoming.is_empty() {
+        msg.push_str("There are no upcoming tasks.\n");
     } else {
-        msg.push_str(&format!("These are the upcoming tasks:\n\n"));
+        msg.push_str("These are the upcoming tasks:\n\n");
 
         for task in upcoming {
             msg.push_str(&format!(" - {}\n", task.task_name));
         }
     }
-    return msg;
+    msg
 }
 
 /// Create a message string given a list of empty tasks and information about the time span is for.
@@ -39,7 +39,7 @@ pub fn format_message(
         crate::format_output::format_time_span(start_datetime, duration),
         crate::format_output::format_upcoming_tasks_into_message(upcoming),
     );
-    return message;
+    message
 }
 
 /// Create a message string given a list of empty tasks and information about the time span is for.
@@ -50,7 +50,7 @@ pub fn format_subject(
     _duration: &chrono::Duration,
 ) -> String {
     let message = format!("Recurring tasks for {}", start_datetime.format("%F"));
-    return message;
+    message
 }
 
 #[cfg(test)]

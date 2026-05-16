@@ -15,18 +15,18 @@ pub fn get_tasks_occurring_within_duration<'a>(
     let mut upcoming: Vec<&Task> = Vec::new();
     for task in tasks {
         let schedule = cron::Schedule::from_str(&task.cron_expression).unwrap();
-        for next_occurance in schedule.after(&now).take(1) {
+        for next_occurance in schedule.after(now).take(1) {
             if next_occurance > *now && next_occurance <= *now + *duration {
                 upcoming.push(task);
             }
         }
     }
-    return upcoming;
+    upcoming
 }
 
 #[cfg(test)]
 mod tasks_tests {
-    use crate::tasks::{get_tasks_occurring_within_duration, Task};
+    use crate::tasks::{Task, get_tasks_occurring_within_duration};
     use chrono::TimeZone;
 
     #[test]

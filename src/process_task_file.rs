@@ -33,7 +33,7 @@ pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>),
         .iter()
         .filter(|key_value_pair| key_value_pair.1.is_table())
         .collect();
-    if tables.len() == 0 {
+    if tables.is_empty() {
         return Err("Could not find tasks.".to_owned());
     }
 
@@ -79,7 +79,7 @@ pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>),
             });
         }
     }
-    return Ok((local_timezone, tasks));
+    Ok((local_timezone, tasks))
 }
 
 #[cfg(test)]
