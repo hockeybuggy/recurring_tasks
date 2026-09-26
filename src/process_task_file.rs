@@ -8,7 +8,7 @@ use crate::Task;
 
 pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>), String> {
     let contents = fs::read_to_string(source_path).expect("Unable to read the source file");
-    let parsed: Toml = match contents.parse() {
+    let parsed: Toml = match toml::from_str(&contents) {
         Ok(toml) => toml,
         Err(error) => return Err(format!("Could not parse toml: {}", error)),
     };
@@ -23,7 +23,10 @@ pub fn parse_toml_file(source_path: &Path) -> Result<(chrono_tz::Tz, Vec<Task>),
             "`timezone` field should be a string containing a valid timezone name.".to_owned(),
         );
     }
-    let local_timezone: Tz = maybe_timezone_string.unwrap().parse()?;
+    let timezone_name = maybe_timezone_string.unwrap();
+    let local_timezone: Tz = timezone_name
+        .parse()
+        .map_err(|_| format!("'{}' is not a valid timezone", timezone_name))?;
 
     let mut tasks: Vec<Task> = vec![];
 

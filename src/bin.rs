@@ -3,7 +3,7 @@ use std::io::prelude::*;
 use std::path::Path;
 
 extern crate clap;
-use clap::{App, Arg};
+use clap::{Arg, Command};
 
 use pulldown_cmark::{Options, Parser, html};
 
@@ -14,21 +14,21 @@ This project outputs a task list given a schedule.
 ";
 
 fn main() {
-    let matches = App::new("Recurring tasks")
+    let matches = Command::new("Recurring tasks")
         .version("0.1.0")
         .author("Douglas Anderson <hockeybuggy@gmail.com>")
         .about(ABOUT_BLERB)
         .arg(
-            Arg::with_name("tasks")
+            Arg::new("tasks")
                 .help("Sets the input task file to use")
-                .takes_value(true)
-                .short("t")
+                .num_args(1)
+                .short('t')
                 .long("tasks")
                 .required(true),
         )
         .get_matches();
 
-    let source_path = Path::new(matches.value_of("tasks").unwrap());
+    let source_path = Path::new(matches.get_one::<String>("tasks").unwrap());
     println!("\nUsing input file: {}\n", source_path.to_str().unwrap());
 
     let (subject, body) = run_from_task_file(source_path);
