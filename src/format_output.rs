@@ -110,12 +110,12 @@ mod format_output_tests {
         let hour = chrono::Duration::hours(1);
         let tasks = &vec![];
 
-        let message = format_message(&tasks, &the_perfect_date_afternoon, &hour);
+        let message = format_message(tasks, &the_perfect_date_afternoon, &hour);
 
         let expected_message = format!(
             "{}\n{}",
             format_time_span(&the_perfect_date_afternoon, &hour),
-            format_upcoming_tasks_into_message(&tasks),
+            format_upcoming_tasks_into_message(tasks),
         );
         assert_eq!(message, expected_message);
     }
@@ -129,7 +129,7 @@ mod format_output_tests {
         let hour = chrono::Duration::hours(1);
         let tasks = &vec![];
 
-        let message = format_subject(&tasks, &the_perfect_date_afternoon, &hour);
+        let message = format_subject(tasks, &the_perfect_date_afternoon, &hour);
 
         let expected_message = format!(
             "Recurring tasks for {}",

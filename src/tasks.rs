@@ -35,8 +35,8 @@ mod tasks_tests {
     #[test]
     fn test_includes_task_at_start_of_window() {
         let midnight = chrono_tz::America::Toronto
-            .ymd(2020, 4, 25)
-            .and_hms(0, 0, 0);
+            .with_ymd_and_hms(2020, 4, 25, 0, 0, 0)
+            .unwrap();
         let tasks = vec![Task {
             cron_expression: "0 0 0 25 4 * *".to_owned(),
             task_name: "Midnight task".to_owned(),
