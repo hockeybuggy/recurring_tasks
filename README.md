@@ -2,17 +2,14 @@
 
 ![Build and Test](https://github.com/hockeybuggy/recurring_tasks/workflows/Build%20and%20Test/badge.svg)
 
-This project sends reminders to myself on a schedule.
-
+This project generates a list of upcoming tasks from a TOML schedule. It does
+not send reminders itself.
 
 ## How this works
 
-This repo works using a counterpart private repository. This repository's
-concern is related to finding upcoming tasks given a task file of a specific
-format.
-
-The counterpart private repository will use this repository, but it's concerns
-are related to periodically running and notifying someone..
+This repository reads a task file, finds tasks scheduled for the current day,
+and writes email-ready output files. A separate private repository runs it
+periodically and handles notifications.
 
 
 ## Running tests
@@ -28,5 +25,5 @@ cargo test
 cargo run -- --tasks tasks/example.toml
 ```
 
-This will output a `body.md`, `body.html` and a `subject.txt`. This files are
-then used for sending emails.
+This writes `body.md`, `body.html`, and `subject.txt` in the current directory.
+Another program can use these files to send email.
