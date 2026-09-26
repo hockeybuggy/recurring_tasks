@@ -12,24 +12,20 @@ pub fn run_from_task_file(source_path: &std::path::Path) -> (String, String) {
     let (timezone, tasks) = crate::process_task_file::parse_toml_file(source_path).unwrap();
 
     let now: DateTime<Utc> = Utc::now();
-    tasks_for_day(
-        &tasks,
-        timezone,
-        now.with_timezone(&timezone).date().naive_local(),
-    )
+    tasks_for_day(&tasks, timezone, now.with_timezone(&timezone).date_naive())
 }
 
 fn tasks_for_day(tasks: &[Task], timezone: chrono_tz::Tz, date: NaiveDate) -> (String, String) {
     let local_datetime = timezone
-        .from_local_datetime(&date.and_hms(0, 0, 0))
+        .from_local_datetime(&date.and_hms_opt(0, 0, 0).unwrap())
         .single()
         .unwrap();
     let next_midnight = timezone
-        .from_local_datetime(&date.succ().and_hms(0, 0, 0))
+        .from_local_datetime(&date.succ_opt().unwrap().and_hms_opt(0, 0, 0).unwrap())
         .single()
         .unwrap();
     let day = next_midnight - local_datetime;
-    let upcoming = crate::tasks::get_tasks_occurring_within_duration(&tasks, &local_datetime, &day);
+    let upcoming = crate::tasks::get_tasks_occurring_within_duration(tasks, &local_datetime, &day);
 
     let message = crate::format_output::format_message(&upcoming, &local_datetime, &day);
     let subject = crate::format_output::format_subject(&upcoming, &local_datetime, &day);
@@ -52,7 +48,7 @@ mod recurring_task_tests {
         let (_, message) = tasks_for_day(
             &tasks,
             chrono_tz::America::Toronto,
-            NaiveDate::from_ymd(2020, 3, 8),
+            NaiveDate::from_ymd_opt(2020, 3, 8).unwrap(),
         );
 
         assert!(message.contains("There are no upcoming tasks."));
@@ -68,7 +64,7 @@ mod recurring_task_tests {
         let (_, message) = tasks_for_day(
             &tasks,
             chrono_tz::America::Toronto,
-            NaiveDate::from_ymd(2020, 11, 1),
+            NaiveDate::from_ymd_opt(2020, 11, 1).unwrap(),
         );
 
         assert!(message.contains(" - Late task\n"));

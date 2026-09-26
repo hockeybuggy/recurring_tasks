@@ -99,9 +99,9 @@ mod process_task_file_tests {
         let dir = env::temp_dir();
         let source_path = dir.join(file_name);
         let mut temp_file = File::create(&source_path).unwrap();
-        temp_file.write_all(&file_contents.as_bytes()).unwrap();
+        temp_file.write_all(file_contents.as_bytes()).unwrap();
 
-        return source_path;
+        source_path
     }
 
     #[test]
