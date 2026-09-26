@@ -8,15 +8,18 @@ pub struct Task {
 
 /// Filters all tasks to just tasks ocurring within the period of `now` and `now + duration`.
 pub fn get_tasks_occurring_within_duration<'a>(
-    tasks: &'a Vec<Task>,
+    tasks: &'a [Task],
     now: &'a chrono::DateTime<chrono_tz::Tz>,
     duration: &'a chrono::Duration,
 ) -> Vec<&'a Task> {
     let mut upcoming: Vec<&Task> = Vec::new();
     for task in tasks {
         let schedule = cron::Schedule::from_str(&task.cron_expression).unwrap();
-        for next_occurance in schedule.after(now).take(1) {
-            if next_occurance > *now && next_occurance <= *now + *duration {
+        for next_occurance in schedule
+            .after(&(*now - chrono::Duration::seconds(1)))
+            .take(1)
+        {
+            if next_occurance >= *now && next_occurance < *now + *duration {
                 upcoming.push(task);
             }
         }
@@ -28,6 +31,22 @@ pub fn get_tasks_occurring_within_duration<'a>(
 mod tasks_tests {
     use crate::tasks::{Task, get_tasks_occurring_within_duration};
     use chrono::TimeZone;
+
+    #[test]
+    fn test_includes_task_at_start_of_window() {
+        let midnight = chrono_tz::America::Toronto
+            .ymd(2020, 4, 25)
+            .and_hms(0, 0, 0);
+        let tasks = vec![Task {
+            cron_expression: "0 0 0 25 4 * *".to_owned(),
+            task_name: "Midnight task".to_owned(),
+        }];
+
+        let day = chrono::Duration::days(1);
+        let upcoming = get_tasks_occurring_within_duration(&tasks, &midnight, &day);
+
+        assert_eq!(upcoming, vec![&tasks[0]]);
+    }
 
     #[test]
     fn test_includes_task_that_occurs_in_the_next_hour() {
