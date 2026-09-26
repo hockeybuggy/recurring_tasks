@@ -38,8 +38,8 @@ mod tasks_tests {
             task_name: "Get new light jacket".to_owned(),
         }];
         let the_perfect_date_morning = chrono_tz::America::Toronto
-            .ymd(2020, 4, 25)
-            .and_hms(9, 10, 11);
+            .with_ymd_and_hms(2020, 4, 25, 9, 10, 11)
+            .unwrap();
 
         let upcoming =
             get_tasks_occurring_within_duration(&tasks, &the_perfect_date_morning, &hour);
@@ -56,8 +56,8 @@ mod tasks_tests {
             task_name: "Get new light jacket".to_owned(),
         }];
         let the_perfect_date_afternoon = chrono_tz::America::Toronto
-            .ymd(2020, 4, 25)
-            .and_hms(16, 21, 00);
+            .with_ymd_and_hms(2020, 4, 25, 16, 21, 00)
+            .unwrap();
 
         let upcoming =
             get_tasks_occurring_within_duration(&tasks, &the_perfect_date_afternoon, &hour);

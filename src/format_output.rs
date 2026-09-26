@@ -89,8 +89,8 @@ mod format_output_tests {
     #[test]
     fn test_format_time_span() {
         let the_perfect_date_afternoon = chrono_tz::America::Toronto
-            .ymd(2020, 4, 25)
-            .and_hms(16, 21, 00);
+            .with_ymd_and_hms(2020, 4, 25, 16, 21, 00)
+            .unwrap();
         let hour = chrono::Duration::hours(1);
 
         let message = format_time_span(&the_perfect_date_afternoon, &hour);
@@ -104,8 +104,8 @@ mod format_output_tests {
     #[test]
     fn test_format_message() {
         let the_perfect_date_afternoon = chrono_tz::America::Toronto
-            .ymd(2020, 4, 25)
-            .and_hms(16, 21, 00);
+            .with_ymd_and_hms(2020, 4, 25, 16, 21, 00)
+            .unwrap();
 
         let hour = chrono::Duration::hours(1);
         let tasks = &vec![];
@@ -123,8 +123,8 @@ mod format_output_tests {
     #[test]
     fn test_format_subject() {
         let the_perfect_date_afternoon = chrono_tz::America::Toronto
-            .ymd(2020, 4, 25)
-            .and_hms(16, 21, 00);
+            .with_ymd_and_hms(2020, 4, 25, 16, 21, 00)
+            .unwrap();
 
         let hour = chrono::Duration::hours(1);
         let tasks = &vec![];
